@@ -3,6 +3,8 @@ import Cart from "../models/Cart.js";
 export const getCart = async (req, res) => {
     try{
         const carts = await Cart.find();
+
+        res.status(200).json(carts);
     }catch(error){
         res.status(500).json({message: error.message})
     }
@@ -20,15 +22,29 @@ export const findCart = async (req, res ) => {
 }
 
 export const postCart = async (req, res) => {
-    const user = new Cart();
-    user.username = req.body.username;
-    user.email = req.body.email;
-    user.password = req.body.password;
+    const carts = new Cart();
+    carts.product_id = req.body.product_id;
+    carts.product_name = req.body.product_name;
+    carts.product_price = req.body.product_price;
+    carts.product_image = req.body.product_image;
+    carts.qty = req.body.qty;
+    carts.user_id = req.body.user_id;
 
-    user.setPassword(req.body.password);
     try{
-        const saveCart = await user.save();
-        res.status(201).json(saveCart);
+        const checkCarts = await Cart.findOne({
+            where: {
+                product_id: req.body.product_id,
+                user_id: req.body.user_id
+            }
+        });
+
+        if(checkCarts){
+            const updateCart = await Cart.updateOne({_id: checkCarts._id}, {$set: {qty: checkCarts.qty + req.body.qty}});
+            res.status(200).json(updateCart);
+        }else{
+            const saveCart = await carts.save();
+            res.status(201).json(saveCart);
+        }
     }catch(error){
         res.status(400).json({message: error.message})
     }

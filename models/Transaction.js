@@ -25,14 +25,18 @@ const Transactions = mongoose.Schema(
             require: true
         },
         total:{
-            type: String,
+            type: Number,
             require: true
         },
         user_id:{
             type: String,
             require: true
         },
-        status:{
+        status_payment:{
+            type: String,
+            require: true
+        },
+        status_shipping:{
             type: String,
             require: true
         },

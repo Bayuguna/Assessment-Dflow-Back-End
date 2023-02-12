@@ -22,7 +22,7 @@ export const Login = async (req, res) => {
                     accessToken: accessToken
                 }
     
-                res.status(201).json({data:newUser, message: "User Loged in"});
+                res.status(200).json({data:newUser, message: "User Loged in"});
             }else{
                 return res.status(400).json({message : "Password wrong"});
             }
