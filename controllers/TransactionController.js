@@ -5,9 +5,7 @@ export const getTransactionByUserId = async (req, res) => {
 
     try{
         const product = await Transaction.find({
-            where: {
                 user_id: req.params.id
-            },
         });
 
         res.status(200).json(product);

@@ -22,26 +22,25 @@ export const findCart = async (req, res ) => {
 }
 
 export const postCart = async (req, res) => {
-    const carts = new Cart();
-    carts.product_id = req.body.product_id;
-    carts.product_name = req.body.product_name;
-    carts.product_price = req.body.product_price;
-    carts.product_image = req.body.product_image;
-    carts.qty = req.body.qty;
-    carts.user_id = req.body.user_id;
 
     try{
         const checkCarts = await Cart.findOne({
-            where: {
                 product_id: req.body.product_id,
                 user_id: req.body.user_id
-            }
         });
 
         if(checkCarts){
             const updateCart = await Cart.updateOne({_id: checkCarts._id}, {$set: {qty: checkCarts.qty + req.body.qty}});
-            res.status(200).json(updateCart);
+            res.status(200).json({data:checkCarts, message: 'update data'});
         }else{
+            const carts = new Cart();
+            carts.product_id = req.body.product_id;
+            carts.product_name = req.body.product_name;
+            carts.product_price = req.body.product_price;
+            carts.product_image = req.body.product_image;
+            carts.qty = req.body.qty;
+            carts.user_id = req.body.user_id;
+
             const saveCart = await carts.save();
             res.status(201).json(saveCart);
         }
